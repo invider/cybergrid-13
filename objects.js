@@ -16,7 +16,7 @@ function WallSegment(x1, z1, x2, z2, y, h, type) {
     function mapTextToCoord(x,y,z,cx,cy){
         vtxPos = vtxPos.concat([x,y,z]);
         texCoord = texCoord.concat([cx,cy]);
-        console.log(vtxPos)
+        //console.log(vtxPos)
     }
     mapTextToCoord(x1,y,z1,cx,cy)
     mapTextToCoord(x1,y+h,z1,cx,cy + cs)

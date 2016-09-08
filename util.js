@@ -1,4 +1,3 @@
-
 function mvPushMatrix() {
     var copy = mat4.create();
     mat4.set(mvMatrix, copy);
@@ -11,9 +10,11 @@ function mvPopMatrix() {
     }
     mvMatrix = mvMatrixStack.pop();
 }
+
 function degToRad(degrees) {
     return degrees * Math.PI / 180;
 }
+
 function createTexture(type, frame, lines) {
     var texture = gl.createTexture();
     texture.image = generateTerminalImage(type, frame, lines)

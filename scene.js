@@ -55,27 +55,14 @@ function setMatrixUniforms() {
     gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
     gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 }
+function setMoveUniforms() {
+    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+}
 
-function handleLoadedWorld(data) {
-    var lines = data.split("\n");
+function generateWorld() {
     var vertexCount = 0;
     var vertexPositions = [];
     var vertexTextureCoords = [];
-    for (var i in lines) {
-        var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
-        if (vals.length == 5 && vals[0] != "//") {
-            // It is a line describing a vertex; get X, Y and Z first
-            vertexPositions.push(parseFloat(vals[0]));
-            vertexPositions.push(parseFloat(vals[1]));
-            vertexPositions.push(parseFloat(vals[2]));
-
-            // And then the texture coords
-            vertexTextureCoords.push(parseFloat(vals[3]));
-            vertexTextureCoords.push(parseFloat(vals[4]));
-
-            vertexCount += 1;
-        }
-    }
     worldVertexPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, worldVertexPositionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
@@ -89,20 +76,21 @@ function handleLoadedWorld(data) {
     worldVertexTextureCoordBuffer.numItems = vertexCount;
 
     generateWalls()
+
+    new Obj(1, 0, 0)
+    new Obj(-1, 0, 0)
+    new Obj(0, 0, 1)
+    new Obj(0, 0, -1)
+    objects[1].wall = 1
+    objects[2].wall = 2
+    objects[3].wall = 3
+
+    objects[0].dx = 0.1
+    objects[1].dx = -0.1
+    objects[2].dz = 0.1
+    objects[3].dz = -0.1
 }
 
-function loadWorld() {
-    var d = ''
-
-    d += '-3.0  1.0 -3.0 0.0 6.0\n'
-    d += '-3.0  1.0  3.0 0.0 0.0\n'
-    d += ' 3.0  1.0  3.0 6.0 0.0\n'
-    d += '-3.0  1.0 -3.0 0.0 6.0\n'
-    d += ' 3.0  1.0 -3.0 6.0 6.0\n'
-    d += ' 3.0  1.0  3.0 6.0 0.0\n'
-
-    handleLoadedWorld(d);
-}
 var blocks = []
 function render(delta) {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -132,6 +120,10 @@ function render(delta) {
 
     segments.map( function(s) {
         s.render(delta)
+    })
+
+    objects.map( function(o) {
+        o.render(delta)
     })
 
     // bind texture and buffers, draw triangles
@@ -200,7 +192,7 @@ function start() {
         }
     }
 
-    loadWorld();
+    generateWorld();
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
     window.onkeydown = handleKeyDown;
