@@ -14,6 +14,11 @@ function handleKeyUp(e) {
     e.stopPropagation()
     return false;
 }
+function handleMouse(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    return false;
+}
 function handleKeyboard(delta) {
     if (keys[33]) {
         // Page Up

@@ -183,7 +183,8 @@ function start() {
     var canvas = document.getElementById("canvas");
     initGL(canvas);
     initShaders();
-    // textures
+
+    // generate textures
     var lines = initShaders.toString().split(";");
     mudTexture = createTexture(0, 0, lines);
 
@@ -199,6 +200,7 @@ function start() {
     gl.enable(gl.DEPTH_TEST);
     window.onkeydown = handleKeyDown;
     window.onkeyup = handleKeyUp;
+    window.oncontextmenu = handleMouse;
     window.addEventListener('resize', expandCanvas, false)
     cycle();
 }
