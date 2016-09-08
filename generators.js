@@ -66,16 +66,19 @@ function generateWalls() {
 function generateWorld() {
     generateWalls()
 
-    new Entity(1, 0, 0)
-    new Entity(-1, 0, 0)
-    new Entity(0, 0, 1)
-    new Entity(0, 0, -1)
-    entities[1].wall = 1
-    entities[2].wall = 2
-    entities[3].wall = 3
+    var e = new Entity(1, 0, 0)
+    e.dx = 0.2
+    spawn(e)
 
-    entities[0].dx = 0.2
-    entities[1].dx = -0.2
-    entities[2].dz = 0.2
-    entities[3].dz = -0.2
+    e = new Entity(-1, 0, 0)
+    e.wall = 1; e.dx = -0.2
+    spawn(e)
+
+    e = new Entity(0, 0, 1)
+    e.wall = 2; e.dz = 0.2
+    spawn(e)
+
+    e = new Entity(0, 0, -1)
+    e.wall = 3; e.dz = -0.2
+    spawn(e)
 }

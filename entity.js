@@ -1,5 +1,5 @@
-
 function Entity(x, y, z) {
+    this.alive = true
 
     this.wall = 0
     this.x = x
@@ -13,45 +13,47 @@ function Entity(x, y, z) {
     this.yaw = 0
     this.roll = 0 
 
-    // generate geometry
-    var vtxPos = []
-    var texCoord = []
+    this.init = function() {
+        // generate geometry
+        var vtxPos = []
+        var texCoord = []
 
-    vtxPos.push(-0.5)
-    vtxPos.push(0)
-    vtxPos.push(-0.5)
-    texCoord.push(0)
-    texCoord.push(0);
-    
-    vtxPos.push(0.5)
-    vtxPos.push(0)
-    vtxPos.push(-0.5)
-    texCoord.push(1)
-    texCoord.push(0);
+        vtxPos.push(-0.5)
+        vtxPos.push(0)
+        vtxPos.push(-0.5)
+        texCoord.push(0)
+        texCoord.push(0);
+        
+        vtxPos.push(0.5)
+        vtxPos.push(0)
+        vtxPos.push(-0.5)
+        texCoord.push(1)
+        texCoord.push(0);
 
-    vtxPos.push(-0.5)
-    vtxPos.push(0)
-    vtxPos.push(0.5)
-    texCoord.push(0)
-    texCoord.push(1);
+        vtxPos.push(-0.5)
+        vtxPos.push(0)
+        vtxPos.push(0.5)
+        texCoord.push(0)
+        texCoord.push(1);
 
-    vtxPos.push(0.5)
-    vtxPos.push(0)
-    vtxPos.push(0.5)
-    texCoord.push(1)
-    texCoord.push(1);
+        vtxPos.push(0.5)
+        vtxPos.push(0)
+        vtxPos.push(0.5)
+        texCoord.push(1)
+        texCoord.push(1);
 
-    this.vposBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vtxPos), gl.STATIC_DRAW);
-    this.vposBuffer.itemSize = 3;
-    this.vposBuffer.numItems = 4;
+        this.vposBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vtxPos), gl.STATIC_DRAW);
+        this.vposBuffer.itemSize = 3;
+        this.vposBuffer.numItems = 4;
 
-    this.texCoordBuf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoord), gl.STATIC_DRAW);
-    this.texCoordBuf.itemSize = 2;
-    this.texCoordBuf.numItems = 4;
+        this.texCoordBuf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoord), gl.STATIC_DRAW);
+        this.texCoordBuf.itemSize = 2;
+        this.texCoordBuf.numItems = 4;
+    }
     
     this.render = function(delta) {
         // update
@@ -87,6 +89,4 @@ function Entity(x, y, z) {
 
         mvPopMatrix()
     }
-    
-    entities.push(this)
 }

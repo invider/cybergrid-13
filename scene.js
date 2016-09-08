@@ -31,6 +31,20 @@ var joggingAngle = 0;
 var lastFrame = Date.now()
 var shaderProgram;
 
+function spawn(entity) {
+    entity.init()
+
+    var placed = false
+    for (var i = 0; i < entities.length; i++) {
+        if (!entities[i].alive) {
+            entities[i] = entity
+            placed = true
+            break
+        }
+    }
+    if (!placed) entities.push(entity)
+}
+
 
 function cycle() {
     var now = Date.now()
