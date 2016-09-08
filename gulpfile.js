@@ -4,7 +4,19 @@ var closureCompiler = require('gulp-closure-compiler');
 var htmlclean = require('gulp-htmlclean');
 
 var paths = {
-    scripts: ["webgl-utils.js", 'glMatrix-0.9.5.min.js', "proc.js", "scene.js", "keyboard.js", "objects.js", "shaders.js", "util.js", "generators.js"],
+    scripts: [
+        'glMatrix-0.9.5.min.js',
+        "proc.js",
+        "setup.js",
+        "shaders.js",
+        "generators.js",
+        "entity.js",
+        "objects.js",
+        "util.js",
+        "keyboard.js",
+        "scene.js",
+        "app.js"
+        ],
     html: ['index.html'],
     dist: 'dist/'
 };
