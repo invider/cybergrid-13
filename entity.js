@@ -1,5 +1,5 @@
-var objects = []
-function Obj(x, y, z) {
+
+function Entity(x, y, z) {
 
     this.wall = 0
     this.x = x
@@ -87,6 +87,6 @@ function Obj(x, y, z) {
 
         mvPopMatrix()
     }
-
-    objects.push(this)
+    
+    entities.push(this)
 }

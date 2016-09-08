@@ -1,6 +1,9 @@
 var gl;
+
+// entities
+var entities = []
+var blocks = []
 var segments = []
-var mudTexture;
 var wallTexture = []
 
 var mvMatrix = mat4.create();
@@ -21,38 +24,45 @@ var zPos = 0;
 
 var speed = 0;
 
+var lastTime = 0;
+// Used to make us "jog" up and down as we move forward.
+var joggingAngle = 0;
+
 var lastFrame = Date.now()
 var shaderProgram;
 
-function start() {
-    var canvas = document.getElementById("canvas");
-    initGL(canvas);
-    initShaders();
 
-    // generate textures
-    var lines = initShaders.toString().split(";");
-    mudTexture = createTexture(0, 0, lines);
+function cycle() {
+    var now = Date.now()
+    var delta = (now - lastFrame)/1000
+    window.requestAnimFrame(cycle);
+    handleKeyboard(delta);
+    update(delta);
+    render(delta);
 
-    for (var type = 0; type < 5; type++) {
-        wallTexture[type] = []
-        for (var i = 0; i < lines.length; i++) {
-            wallTexture[type].push(createTexture(type, i, lines))
-        }
-    }
-
-    generateWorld();
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(gl.DEPTH_TEST);
-    window.onkeydown = handleKeyDown;
-    window.onkeyup = handleKeyUp;
-    window.oncontextmenu = handleMouse;
-    window.addEventListener('resize', expandCanvas, false)
-    cycle();
+    lastFrame = now
 }
-document.addEventListener("DOMContentLoaded", start);
 
+function update() {
+    var timeNow = new Date().getTime();
+    if (lastTime != 0) {
+        var elapsed = timeNow - lastTime;
 
-var blocks = []
+        if (speed != 0) {
+            xPos -= Math.sin(degToRad(yaw)) * speed * elapsed;
+            zPos -= Math.cos(degToRad(yaw)) * speed * elapsed;
+
+            joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
+            yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.5
+        }
+
+        yaw += yawRate * elapsed;
+        pitch += pitchRate * elapsed;
+
+    }
+    lastTime = timeNow;
+}
+
 function render(delta) {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -79,46 +89,9 @@ function render(delta) {
         s.render(delta)
     })
 
-    // render objects
-    objects.map( function(o) {
-        o.render(delta)
+    // render entities
+    entities.map( function(e) {
+        e.render(delta)
     })
 }
-
-
-var lastTime = 0;
-// Used to make us "jog" up and down as we move forward.
-var joggingAngle = 0;
-
-function update() {
-    var timeNow = new Date().getTime();
-    if (lastTime != 0) {
-        var elapsed = timeNow - lastTime;
-
-        if (speed != 0) {
-            xPos -= Math.sin(degToRad(yaw)) * speed * elapsed;
-            zPos -= Math.cos(degToRad(yaw)) * speed * elapsed;
-
-            joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
-            yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.5
-        }
-
-        yaw += yawRate * elapsed;
-        pitch += pitchRate * elapsed;
-
-    }
-    lastTime = timeNow;
-}
-
-function cycle() {
-    var now = Date.now()
-    var delta = (now - lastFrame)/1000
-    window.requestAnimFrame(cycle);
-    handleKeyboard(delta);
-    update(delta);
-    render(delta);
-
-    lastFrame = now
-}
-
 
