@@ -1,13 +1,12 @@
-'use strict'
-
 var gl;
 var segments = []
 var mudTexture;
 var wallTexture = []
 
-
 var mvMatrix = mat4.create();
 var mvMatrixStack = [];
+
+// camera
 var pMatrix = mat4.create();
 
 var pitch = 0;
@@ -17,13 +16,11 @@ var yaw = 0;
 var yawRate = 0;
 
 var xPos = 0;
-var yPos = 0.4;
+var yPos = 0.5; // player height
 var zPos = 0;
 
 var speed = 0;
 
-var worldVertexPositionBuffer = null;
-var worldVertexTextureCoordBuffer = null;
 var lastFrame = Date.now()
 var shaderProgram;
 
@@ -103,7 +100,7 @@ function update() {
             zPos -= Math.cos(degToRad(yaw)) * speed * elapsed;
 
             joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
-            yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.4
+            yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.5
         }
 
         yaw += yawRate * elapsed;

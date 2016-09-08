@@ -62,3 +62,20 @@ function generateWalls() {
         cw(x, y, dx, dy, by, h, len)
     }
 }
+
+function generateWorld() {
+    generateWalls()
+
+    new Obj(1, 0, 0)
+    new Obj(-1, 0, 0)
+    new Obj(0, 0, 1)
+    new Obj(0, 0, -1)
+    objects[1].wall = 1
+    objects[2].wall = 2
+    objects[3].wall = 3
+
+    objects[0].dx = 0.1
+    objects[1].dx = -0.1
+    objects[2].dz = 0.1
+    objects[3].dz = -0.1
+}
