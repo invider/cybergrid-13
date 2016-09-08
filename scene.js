@@ -126,6 +126,7 @@ function render(delta) {
         o.render(delta)
     })
 
+    /*
     // bind texture and buffers, draw triangles
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, mudTexture);
@@ -139,6 +140,7 @@ function render(delta) {
 
     setMatrixUniforms();
     gl.drawArrays(gl.TRIANGLES, 0, worldVertexPositionBuffer.numItems);
+    */
 }
 
 
