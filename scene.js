@@ -2,9 +2,11 @@ var gl;
 
 // entities
 var entities = []
+var textureSets = []
+
+// legacy - need to get rid of those
 var blocks = []
 var segments = []
-var textureSets = []
 
 var mvMatrix = mat4.create();
 var mvMatrixStack = [];

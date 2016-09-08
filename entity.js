@@ -1,7 +1,6 @@
 function Entity(x, y, z) {
 
     this.alive = true
-    this.time = 0
 
     this.x = x
     this.y = y
@@ -75,7 +74,6 @@ function Entity(x, y, z) {
     
     this.render = function(delta) {
         // update
-        this.time += delta
         this.x += this.dx*delta
         this.y += this.dy*delta
         this.z += this.dz*delta
