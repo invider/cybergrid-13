@@ -27,78 +27,38 @@ var worldVertexTextureCoordBuffer = null;
 var lastFrame = Date.now()
 var shaderProgram;
 
-function expandCanvas() {
-    var canvas = document.getElementById('canvas')
-    var newWidth = window.innerWidth
-    var newHeight = window.innerHeight
-    canvas.width = newWidth
-    canvas.height = newHeight
-    canvas.style.width = newWidth + 'px'
-    canvas.style.height = newHeight + 'px'
-    gl.viewportWidth = canvas.width;
-    gl.viewportHeight = canvas.height;
-    render()
-}
+function start() {
+    var canvas = document.getElementById("canvas");
+    initGL(canvas);
+    initShaders();
 
-function initGL(canvas) {
-    try {
-        gl = canvas.getContext("experimental-webgl");
-        expandCanvas()
-        gl.viewportWidth = canvas.width;
-        gl.viewportHeight = canvas.height;
-    } catch (e) {
-        alert("no webgl!");
+    // generate textures
+    var lines = initShaders.toString().split(";");
+    mudTexture = createTexture(0, 0, lines);
+
+    for (var type = 0; type < 5; type++) {
+        wallTexture[type] = []
+        for (var i = 0; i < lines.length; i++) {
+            wallTexture[type].push(createTexture(type, i, lines))
+        }
     }
+
+    generateWorld();
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+    window.onkeydown = handleKeyDown;
+    window.onkeyup = handleKeyUp;
+    window.oncontextmenu = handleMouse;
+    window.addEventListener('resize', expandCanvas, false)
+    cycle();
 }
+document.addEventListener("DOMContentLoaded", start);
 
-function setMatrixUniforms() {
-    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-}
-function setMoveUniforms() {
-    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-}
-
-function generateWorld() {
-    var vertexCount = 0;
-    var vertexPositions = [];
-    var vertexTextureCoords = [];
-    worldVertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, worldVertexPositionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
-    worldVertexPositionBuffer.itemSize = 3;
-    worldVertexPositionBuffer.numItems = vertexCount;
-
-    worldVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, worldVertexTextureCoordBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureCoords), gl.STATIC_DRAW);
-    worldVertexTextureCoordBuffer.itemSize = 2;
-    worldVertexTextureCoordBuffer.numItems = vertexCount;
-
-    generateWalls()
-
-    new Obj(1, 0, 0)
-    new Obj(-1, 0, 0)
-    new Obj(0, 0, 1)
-    new Obj(0, 0, -1)
-    objects[1].wall = 1
-    objects[2].wall = 2
-    objects[3].wall = 3
-
-    objects[0].dx = 0.1
-    objects[1].dx = -0.1
-    objects[2].dz = 0.1
-    objects[3].dz = -0.1
-}
 
 var blocks = []
 function render(delta) {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    if (worldVertexTextureCoordBuffer == null || worldVertexPositionBuffer == null) {
-        return;
-    }
 
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 
@@ -122,25 +82,10 @@ function render(delta) {
         s.render(delta)
     })
 
+    // render objects
     objects.map( function(o) {
         o.render(delta)
     })
-
-    /*
-    // bind texture and buffers, draw triangles
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, mudTexture);
-    gl.uniform1i(shaderProgram.samplerUniform, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, worldVertexTextureCoordBuffer);
-    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, worldVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, worldVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, worldVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-    setMatrixUniforms();
-    gl.drawArrays(gl.TRIANGLES, 0, worldVertexPositionBuffer.numItems);
-    */
 }
 
 
@@ -179,30 +124,4 @@ function cycle() {
     lastFrame = now
 }
 
-function start() {
-    var canvas = document.getElementById("canvas");
-    initGL(canvas);
-    initShaders();
 
-    // generate textures
-    var lines = initShaders.toString().split(";");
-    mudTexture = createTexture(0, 0, lines);
-
-    for (var type = 0; type < 5; type++) {
-        wallTexture[type] = []
-        for (var i = 0; i < lines.length; i++) {
-            wallTexture[type].push(createTexture(type, i, lines))
-        }
-    }
-
-    generateWorld();
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(gl.DEPTH_TEST);
-    window.onkeydown = handleKeyDown;
-    window.onkeyup = handleKeyUp;
-    window.oncontextmenu = handleMouse;
-    window.addEventListener('resize', expandCanvas, false)
-    cycle();
-}
-
-document.addEventListener("DOMContentLoaded", start);
