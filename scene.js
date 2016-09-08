@@ -32,7 +32,9 @@ var joggingShift = 0;
 var lastTime = Date.now()
 var shaderProgram;
 
-function spawn(entity) {
+function spawn(cons, x, y, z) {
+    var entity = new cons()
+    entity.initPos(x, y, z)
     entity.init()
 
     var placed = false
@@ -44,6 +46,7 @@ function spawn(entity) {
         }
     }
     if (!placed) entities.push(entity)
+    return entity
 }
 
 
@@ -88,8 +91,8 @@ function render(delta) {
 
     // render walls
     //gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.GL_BLEND);
-    gl.blendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
+    //gl.enable(gl.GL_BLEND);
+    //gl.blendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
     //gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     //gl.blendFunc(gl.ONE, gl.ONE);
     //gl.blendFunc(gl.ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
@@ -100,7 +103,10 @@ function render(delta) {
 
     // update and render entities
     entities.map( function(e) {
-        if (e.alive) e.render(delta)
+        if (e.alive) {
+            e.update(delta)
+            e.render(delta)
+        }
     })
 }
 

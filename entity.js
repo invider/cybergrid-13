@@ -1,58 +1,54 @@
-function Entity(x, y, z) {
+function Entity() {
 
-    this.alive = true
+    // executed when spawned
+    this.initPos = function(x, y, z) {
+        this.alive = true
+        this.x = x
+        this.y = y
+        this.z = z
+        this.pitch = 0
+        this.yaw = 0
+        this.roll = 0 
+        this.scale = [1, 1, 1]
 
-    this.x = x
-    this.y = y
-    this.z = z
+        this.dx = 0
+        this.dy = 0
+        this.dz = 0
+    }
 
-    this.dx = 0
-    this.dy = 0
-    this.dz = 0
-    this.pitch = 0
-    this.yaw = 0
-    this.roll = 0 
+    this.initBufs = function(vtx, tex, n) {
+        this.vposBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vtx), gl.STATIC_DRAW);
+        this.vposBuffer.itemSize = 3;
+        this.vposBuffer.numItems = n;
 
+        this.texCoordBuf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tex), gl.STATIC_DRAW);
+        this.texCoordBuf.itemSize = 2;
+        this.texCoordBuf.numItems = n;
+    }
+
+    // executed when spawned after initPos
     this.init = function() {
         // generate geometry
         var vtxPos = []
         var texCoord = []
 
-        vtxPos.push(-0.5)
-        vtxPos.push(0)
-        vtxPos.push(-0.5)
-        texCoord.push(0)
-        texCoord.push(0);
-        
-        vtxPos.push(0.5)
-        vtxPos.push(0)
-        vtxPos.push(-0.5)
-        texCoord.push(1)
-        texCoord.push(0);
-
-        vtxPos.push(-0.5)
-        vtxPos.push(0)
-        vtxPos.push(0.5)
-        texCoord.push(0)
-        texCoord.push(1);
-
-        vtxPos.push(0.5)
-        vtxPos.push(0)
-        vtxPos.push(0.5)
-        texCoord.push(1)
-        texCoord.push(1);
-
-        this.vposBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vtxPos), gl.STATIC_DRAW);
-        this.vposBuffer.itemSize = 3;
-        this.vposBuffer.numItems = 4;
-
-        this.texCoordBuf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoord), gl.STATIC_DRAW);
-        this.texCoordBuf.itemSize = 2;
-        this.texCoordBuf.numItems = 4;
+        var vtxPos = [
+                1, 0, 1,
+                -1, 0, 1,
+                1, 0, -1,
+                -1, 0, -1
+        ]
+        var texPos = [
+                0, 0,
+                1, 0,
+                0, 1, 
+                1, 1
+        ]
+        this.initBufs(vtxPos, texPos, 4)
 
         // asign textures
         this.textures = textureSets[0]
@@ -71,17 +67,19 @@ function Entity(x, y, z) {
             }
         }
     }
-    
-    this.render = function(delta) {
+
+    this.update = function(delta) {
         // update
         this.x += this.dx*delta
         this.y += this.dy*delta
         this.z += this.dz*delta
         this.roll += 0.4*delta
-        this.yaw += 0.2*delta
+        //this.yaw += 0.2*delta
         //this.pitch += 0.1*delta
         this.nextFrame(delta)
-
+    }
+    
+    this.render = function(delta) {
         // render
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.textures[this.frame]);
@@ -96,6 +94,7 @@ function Entity(x, y, z) {
         // rotate and translate
         mvPushMatrix()
         mat4.translate(mvMatrix, [-this.x, -this.y, -this.z]);
+        mat4.scale(mvMatrix, this.scale);
         mat4.rotate(mvMatrix, -this.roll, [0, 0, 1]);
         mat4.rotate(mvMatrix, -this.pitch, [1, 0, 0]);
         mat4.rotate(mvMatrix, -this.yaw, [0, 1, 0]);
@@ -105,6 +104,7 @@ function Entity(x, y, z) {
         // draw
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
 
+        // back to original transformation
         mvPopMatrix()
     }
 }
