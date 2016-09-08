@@ -49,6 +49,36 @@ function spawn(cons, x, y, z) {
     return entity
 }
 
+// spawn a random signal
+function signal() {
+    var sx = -xPos
+    var sz = -zPos
+    var sy = rand(5)-4
+    var dx = 0, dz = 0
+
+    switch(randomInt(4)) {
+        case 0:
+            sx -= 16; sz += rand(8) - 4; dx = 1;
+            break;
+        case 1:
+            sx += 16; sz += rand(8) - 4; dx = -1;
+            break;
+        case 2:
+            sx += rand(8) - 4; sz -= 16; dz = 1;
+            break;
+        default:
+            sx += rand(8) - 4; sz += 16; dz = -1;
+            break;
+    }
+    var s = spawn(Signal, sx, sy, sz)
+    sx = 2+rand(6) // reuse sx var
+    s.dx = dx*sx
+    s.dz = dz*sx
+    sx = 0.05 + rand(0.2)
+    s.scale = [sx, sx, sx]
+    s.textures = textureSets[randomInt(textureSets.length)]
+}
+
 
 function cycle() {
     var now = Date.now()
@@ -73,6 +103,11 @@ function update(delta) {
 
     yaw += yawRate * delta;
     pitch += pitchRate * delta;
+
+    // spawn signals
+    if (rand(1) < 4*delta) {
+        signal()
+    }
 }
 
 function render(delta) {

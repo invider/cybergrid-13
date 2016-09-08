@@ -22,10 +22,10 @@ function handleMouse(e) {
 function handleKeyboard(delta) {
     if (keys[33]) {
         // Page Up
-        pitchRate = 0.1;
+        pitchRate = 1;
     } else if (keys[34]) {
         // Page Down
-        pitchRate = -0.1;
+        pitchRate = -1;
     } else {
         pitchRate = 0;
     }
