@@ -22,13 +22,12 @@ var xPos = 0;
 var yPos = 0.5; // player height
 var zPos = 0;
 
-var speed = 0;
+var playerSpeed = 0;
 
-var lastTime = 0;
 // Used to make us "jog" up and down as we move forward.
 var joggingAngle = 0;
 
-var lastFrame = Date.now()
+var lastTime = Date.now()
 var shaderProgram;
 
 function spawn(entity) {
@@ -48,33 +47,24 @@ function spawn(entity) {
 
 function cycle() {
     var now = Date.now()
-    var delta = (now - lastFrame)/1000
+    var delta = (now - lastTime)/1000
     window.requestAnimFrame(cycle);
     handleKeyboard(delta);
     update(delta);
     render(delta);
 
-    lastFrame = now
+    lastTime = now
 }
 
-function update() {
-    var timeNow = new Date().getTime();
-    if (lastTime != 0) {
-        var elapsed = timeNow - lastTime;
+function update(delta) {
+    xPos -= Math.sin(yaw) * playerSpeed * delta;
+    zPos -= Math.cos(yaw) * playerSpeed * delta;
 
-        if (speed != 0) {
-            xPos -= Math.sin(degToRad(yaw)) * speed * elapsed;
-            zPos -= Math.cos(degToRad(yaw)) * speed * elapsed;
+    joggingAngle += delta * 10; // 0.6 "fiddle factor" - makes it feel more realistic :-)
+    if (playerSpeed > 0) yPos = Math.sin(joggingAngle) / 15 + 0.5
 
-            joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
-            yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.5
-        }
-
-        yaw += yawRate * elapsed;
-        pitch += pitchRate * elapsed;
-
-    }
-    lastTime = timeNow;
+    yaw += yawRate * delta;
+    pitch += pitchRate * delta;
 }
 
 function render(delta) {
@@ -86,8 +76,8 @@ function render(delta) {
     mat4.identity(mvMatrix);
 
     // move to camera view - pitch, yaw, translate
-    mat4.rotate(mvMatrix, degToRad(-pitch), [1, 0, 0]);
-    mat4.rotate(mvMatrix, degToRad(-yaw), [0, 1, 0]);
+    mat4.rotate(mvMatrix, -pitch, [1, 0, 0]);
+    mat4.rotate(mvMatrix, -yaw, [0, 1, 0]);
     mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
 
 

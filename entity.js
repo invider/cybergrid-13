@@ -1,4 +1,5 @@
 function Entity(x, y, z) {
+
     this.alive = true
 
     this.wall = 0

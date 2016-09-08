@@ -45,10 +45,6 @@ function setMoveUniforms() {
     gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 }
 
-function degToRad(degrees) {
-    return degrees * Math.PI / 180;
-}
-
 function createTexture(type, frame, lines) {
     var texture = gl.createTexture();
     texture.image = generateTerminalImage(type, frame, lines)
