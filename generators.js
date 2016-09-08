@@ -19,7 +19,7 @@ function cb(sx, sy, by, h, type) {
 }
 
 function cw(sx, sy, dx, dy, y, h, len) {
-    var type = randomInt(wallTexture.length)
+    var type = randomInt(textureSets.length)
     for (var i = 0; i < len; i++) {
         cb(sx, sy, y, h, type)
         sx += dx
@@ -70,15 +70,18 @@ function generateWorld() {
     e.dx = 0.2
     spawn(e)
 
-    e = new Entity(-1, 0, 0)
-    e.wall = 1; e.dx = -0.2
+    e = new Entity(-1, -0.3, 0)
+    e.dx = -0.2
     spawn(e)
+    e.textures = textureSets[1]
 
-    e = new Entity(0, 0, 1)
-    e.wall = 2; e.dz = 0.2
+    e = new Entity(0, -0.3, 1)
+    e.dz = 0.2
     spawn(e)
+    e.textures = textureSets[2]
 
-    e = new Entity(0, 0, -1)
-    e.wall = 3; e.dz = -0.2
+    e = new Entity(0, -0.3, -1)
+    e.dz = -0.2
     spawn(e)
+    e.textures = textureSets[3]
 }

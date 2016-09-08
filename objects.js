@@ -48,12 +48,12 @@ function WallSegment(x1, z1, x2, z2, y, h, type) {
         if (this.time > 1) {
             this.time = 0
             this.frame++
-            if (this.frame >= wallTexture[this.type].length) {
+            if (this.frame >= textureSets[this.type].length) {
                 this.frame = 0
             }
         }
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, wallTexture[this.type][this.frame]);
+        gl.bindTexture(gl.TEXTURE_2D, textureSets[this.type][this.frame]);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);

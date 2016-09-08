@@ -4,7 +4,7 @@ var gl;
 var entities = []
 var blocks = []
 var segments = []
-var wallTexture = []
+var textureSets = []
 
 var mvMatrix = mat4.create();
 var mvMatrixStack = [];
@@ -24,8 +24,8 @@ var zPos = 0;
 
 var playerSpeed = 0;
 
-// Used to make us "jog" up and down as we move forward.
-var joggingAngle = 0;
+// Used to make us "jog" up and down
+var joggingShift = 0;
 
 var lastTime = Date.now()
 var shaderProgram;
@@ -57,11 +57,14 @@ function cycle() {
 }
 
 function update(delta) {
+    // mode and fiddle camera
     xPos -= Math.sin(yaw) * playerSpeed * delta;
     zPos -= Math.cos(yaw) * playerSpeed * delta;
 
-    joggingAngle += delta * 10; // 0.6 "fiddle factor" - makes it feel more realistic :-)
-    if (playerSpeed > 0) yPos = Math.sin(joggingAngle) / 15 + 0.5
+    if (playerSpeed != 0) {
+        joggingShift += delta * 10;
+        yPos = Math.sin(joggingShift) / 15 + 0.5
+    }
 
     yaw += yawRate * delta;
     pitch += pitchRate * delta;
@@ -71,15 +74,15 @@ function render(delta) {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // set camera view
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-
+    // reset model movement matrix
     mat4.identity(mvMatrix);
 
     // move to camera view - pitch, yaw, translate
     mat4.rotate(mvMatrix, -pitch, [1, 0, 0]);
     mat4.rotate(mvMatrix, -yaw, [0, 1, 0]);
     mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
-
 
     // render walls
     //gl.enable(gl.DEPTH_TEST);
@@ -93,9 +96,9 @@ function render(delta) {
         s.render(delta)
     })
 
-    // render entities
+    // update and render entities
     entities.map( function(e) {
-        e.render(delta)
+        if (e.alive) e.render(delta)
     })
 }
 

@@ -1,8 +1,8 @@
 function Entity(x, y, z) {
 
     this.alive = true
+    this.time = 0
 
-    this.wall = 0
     this.x = x
     this.y = y
     this.z = z
@@ -54,20 +54,39 @@ function Entity(x, y, z) {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoord), gl.STATIC_DRAW);
         this.texCoordBuf.itemSize = 2;
         this.texCoordBuf.numItems = 4;
+
+        // asign textures
+        this.textures = textureSets[0]
+        this.frame = 0
+        this.frameTime = 0
+        this.frameSpeed = 0.1 + Math.random()
+    }
+
+    this.nextFrame = function(delta) {
+        this.frameTime += delta * this.frameSpeed
+        if (this.frameTime > 1) {
+            this.frameTime = 0
+            this.frame++
+            if (this.frame >= this.textures.length) {
+                this.frame = 0
+            }
+        }
     }
     
     this.render = function(delta) {
         // update
+        this.time += delta
         this.x += this.dx*delta
         this.y += this.dy*delta
         this.z += this.dz*delta
         this.roll += 0.4*delta
         this.yaw += 0.2*delta
         //this.pitch += 0.1*delta
+        this.nextFrame(delta)
 
         // render
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, wallTexture[this.wall][0]);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[this.frame]);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
