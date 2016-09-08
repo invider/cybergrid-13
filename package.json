@@ -1,0 +1,24 @@
+{
+  "name": "cybergrid-13",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generators.js",
+  "dependencies": {
+    "gulp-closure-compiler": "^0.4.0",
+    "gulp-htmlclean": "^2.7.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invider/cybergrid-13.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/invider/cybergrid-13/issues"
+  },
+  "homepage": "https://github.com/invider/cybergrid-13#readme"
+}
