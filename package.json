@@ -7,7 +7,9 @@
     "gulp-closure-compiler": "^0.4.0",
     "gulp-htmlclean": "^2.7.6"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
