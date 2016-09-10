@@ -38,33 +38,17 @@ function Entity() {
         var texCoord = []
 
         var vtxPos = [
-            -1, -1, -1,
-            -1,  1, -1,
-            -1, -1,  1,
-            -1,  1, -1,
-            -1, -1,  1,
-            -1,  1,  1,
+            -1, -1, -1, -1,  1, -1, -1, -1,  1,
+            -1,  1, -1, -1, -1,  1, -1,  1,  1,
             
-            -1, -1,  1,
-            -1,  1,  1,
-             1, -1,  1,
-            -1,  1,  1,
-             1, -1,  1,
-             1,  1,  1,
+            -1, -1,  1, -1,  1,  1, 1, -1,  1,
+            -1,  1,  1,  1, -1,  1, 1,  1,  1,
             
-             1, -1,  1,
-             1,  1,  1,
-             1, -1, -1,
-             1,  1,  1,
-             1, -1, -1,
-             1,  1, -1,
+             1, -1,  1, 1,  1,  1, 1, -1, -1,
+             1,  1,  1, 1, -1, -1, 1,  1, -1,
 
-             1, -1, -1,
-             1,  1, -1,
-            -1, -1, -1,
-             1,  1, -1,
-            -1, -1, -1,
-            -1,  1, -1,
+             1, -1, -1,  1,  1, -1, -1, -1, -1,
+             1,  1, -1, -1, -1, -1, -1,  1, -1,
         ]
         
         var texPos = [
@@ -76,8 +60,8 @@ function Entity() {
         this.initBufs(vtxPos, texPos, 24)
 
         // asign textures
-        this.type = randomInt(3)
-        this.textures = textureSets[this.type]
+        this.type = 0
+        this.textures = textureSets[0]
         this.frame = 0
         this.frameTime = 0
         this.frameSpeed = 0.1 + Math.random()
@@ -118,6 +102,7 @@ function Entity() {
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.vposBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
         // rotate and translate
+        setMatrixUniforms()
         mvPushMatrix()
         mat4.translate(mvMatrix, [-this.x, -this.y, -this.z]);
         mat4.scale(mvMatrix, this.scale);

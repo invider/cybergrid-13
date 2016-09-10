@@ -125,11 +125,6 @@ function render(delta) {
     mat4.rotate(mvMatrix, -yaw, [0, 1, 0]);
     mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
 
-    // render walls
-    segments.map( function(s) {
-        s.render(delta)
-    })
-
     // update and render entities
     entities.map( function(e) {
         if (e.alive) {

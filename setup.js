@@ -29,7 +29,7 @@ function start() {
     }
 
     generateWorld();
-    gl.clearColor(0.05, 0.0, 0.1, 1.0); // scene background color
+    gl.clearColor(0.1, 0.0, 0.2, 1.0); // scene background color
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
