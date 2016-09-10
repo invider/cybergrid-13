@@ -4,10 +4,10 @@
 const MILK=1;
 const ROAD=2;
 const GLUCK=3;
-const UP=1
-const LEFT=2
-const RIGHT=3
-const DOWN=4
+const UP=1;
+const LEFT=2;
+const RIGHT=3;
+const DOWN=4;
 /**
  * 1-up
  * 2-left
@@ -29,7 +29,7 @@ var Field = function(xSize, ySize, x, y){
      * returns next possible direction
      */
     my.getNextPossibleDirection = function(){
-        return ~~(Math.random() * 4);
+        return ~~(Math.random() * 4);К
     };
     /**
      * returns next x y for current vector
@@ -55,15 +55,17 @@ var Field = function(xSize, ySize, x, y){
      * @returns {[number, number]}
      */
     my.getNextXY = function(){
-        var retr=100;
+        var retr=1000;
         do{
             var r = my._getNextXY(my.getNextPossibleDirection());
             retr --;
             if (!retr){
                 throw "1";
             }
-            console.log("r:", r);
-        } while (r[0] > xSize || r[0] < 0 || r[1] > ySize || r < 0 || my.getCell(r) == ROAD || my.getCell(r) == GLUCK);
+        } while (
+            r[0] >= xSize || r[0] < 0 || r[1] >= ySize || r[1] < 0
+            || my.getCell(r) == ROAD || my.getCell(r) == GLUCK
+        );
         return r;
     };
 
@@ -84,13 +86,19 @@ var Field = function(xSize, ySize, x, y){
             }
         }
     };
+    /**
+     * calls one iterration of field generation
+     * @private
+     */
     my._iter = function(){
         my.data[x][y] = ROAD;
         var xy = my.getNextXY();
         x = xy[0];
         y = xy[1];
-        console.log(x,y)
     };
+    /**
+     * creates field with MILK field types
+     */
     my.createField = function(){
         my.eachCell(function(x, y){
             my.data[x][y] = MILK;
@@ -98,8 +106,8 @@ var Field = function(xSize, ySize, x, y){
     }
 };
 var f = new Field(32,32, 8, 8);
-for (var i=0; i < 10; i++){
-    f.createField();
+f.createField();
+for (var i=0; i < 1000; i++){
     f._iter();
 }
 console.log(f.data.map(function(a){
