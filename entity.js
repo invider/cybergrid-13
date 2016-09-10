@@ -3,6 +3,7 @@ function Entity() {
     // executed when spawned
     this.initPos = function(x, y, z) {
         this.alive = true
+        this.strip = false
         this.x = x
         this.y = y
         this.z = z
@@ -37,21 +38,69 @@ function Entity() {
         var texCoord = []
 
         var vtxPos = [
-                1, 0, 1,
-                -1, 0, 1,
-                1, 0, -1,
-                -1, 0, -1
+            -1, -1, -1,
+            -1,  1, -1,
+            -1, -1,  1,
+            -1,  1, -1,
+            -1, -1,  1,
+            -1,  1,  1,
+            
+            -1, -1,  1,
+            -1,  1,  1,
+             1, -1,  1,
+            -1,  1,  1,
+             1, -1,  1,
+             1,  1,  1,
+            
+             1, -1,  1,
+             1,  1,  1,
+             1, -1, -1,
+             1,  1,  1,
+             1, -1, -1,
+             1,  1, -1,
+
+             1, -1, -1,
+             1,  1, -1,
+            -1, -1, -1,
+             1,  1, -1,
+            -1, -1, -1,
+            -1,  1, -1,
         ]
+        
         var texPos = [
-                0, 0,
-                1, 0,
-                0, 1, 
-                1, 1
+            0, 0,
+            0, 1,
+            1, 0, 
+            0, 1,
+            1, 0, 
+            1, 1,
+
+            0, 0,
+            0, 1,
+            1, 0, 
+            0, 1,
+            1, 0, 
+            1, 1,
+
+            0, 0,
+            0, 1,
+            1, 0, 
+            0, 1,
+            1, 0, 
+            1, 1,
+
+            0, 0,
+            0, 1,
+            1, 0, 
+            0, 1,
+            1, 0, 
+            1, 1,
         ]
-        this.initBufs(vtxPos, texPos, 4)
+        this.initBufs(vtxPos, texPos, 24)
 
         // asign textures
-        this.textures = textureSets[0]
+        this.type = rand(3)
+        this.textures = textureSets[this.type]
         this.frame = 0
         this.frameTime = 0
         this.frameSpeed = 0.1 + Math.random()
@@ -73,7 +122,7 @@ function Entity() {
         this.x += this.dx*delta
         this.y += this.dy*delta
         this.z += this.dz*delta
-        this.roll += 0.4*delta
+        //this.roll += 0.4*delta
         //this.yaw += 0.2*delta
         //this.pitch += 0.1*delta
         this.nextFrame(delta)
@@ -102,7 +151,11 @@ function Entity() {
         setMoveUniforms();
 
         // draw
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
+        if (this.strip) {
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
+        } else {
+            gl.drawArrays(gl.TRIANGLES, 0, this.vposBuffer.numItems);
+        }
 
         // back to original transformation
         mvPopMatrix()

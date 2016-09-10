@@ -28,9 +28,6 @@ function start() {
         }
     }
 
-    // load texture
-    alphaTexture[0] = loadTexture('alien-2.png')
-
     generateWorld();
     gl.clearColor(0.05, 0.0, 0.1, 1.0); // scene background color
     gl.enable(gl.DEPTH_TEST);
