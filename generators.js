@@ -1,8 +1,9 @@
 const FIELD_SIZE=32
+const HASH_SIZE=1024
 function cb(sx, sy, by, h, type) {
-    if (sx < 0) sx = 0; else if (sx > 128) sx = 128
-    if (sy < 0) sy = 0; else if (sy > 128) sy = 128
-    var shift = sy*128 + sx
+    if (sx < 0) sx = 0; else if (sx > HASH_SIZE) sx = HASH_SIZE
+    if (sy < 0) sy = 0; else if (sy > HASH_SIZE) sy = HASH_SIZE
+    var shift = sy*HASH_SIZE + sx
     if (blocks[shift]) {
         return blocks[shift]
     }
@@ -63,10 +64,30 @@ function generateWalls() {
     }
 }
 
-function generateWorld() {
-    generateWalls()
+function generateCell(x,y,type){
+    var by = 1;
+    new WallSegment(x+1, y, x, y, by, 1, type)
+    new WallSegment(x, y, x, y+1, by, 1, type)
+    new WallSegment(x+1, y+1, x+1, y, by, 1, type)
+    new WallSegment(x, y+1, x+1, y+1, by, 1, type)
+}
 
-    var e = spawn(Entity, 1, 0, 0)
+
+function generateField(){
+    var W = 20;
+    var field=new Field(W,W,W/2,W/2);
+    field.generate(20);
+    field.eachCell(function(x, y, cell){
+        generateCell(W/2 - x, W/2 - y, cell);
+    })
+}
+
+function generateWorld() {
+    debugger;
+    generateField()
+    //generateWalls()
+
+    /*var e = spawn(Entity, 1, 0, 0)
     e.dx = 0.2
 
     e = spawn(Entity, -1, -0.3, 0)
@@ -79,7 +100,7 @@ function generateWorld() {
 
     e = spawn(Entity, 0, -0.3, -1)
     e.dz = -0.2
-    e.textures = alphaTexture
+    e.textures = alphaTexture*/
 
     //e = spawn(Signal, 0, 0, 0)
     //e.scale = [2, 2, 2]

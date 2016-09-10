@@ -4,21 +4,21 @@
 const MILK=1;
 const ROAD=2;
 const GLUCK=3;
-const UP=1;
-const LEFT=2;
-const DOWN=3;
-const RIGHT=4;
-
-/**
- * 1-up
- * 2-left
- * 3-right
- * 4-down
- * @type {number[]}
- */
-const DIRECTIONS=[UP,LEFT,RIGHT,DOWN];
-
 var Field = function(xSize, ySize, x, y){
+    const UP=1;
+    const LEFT=2;
+    const DOWN=3;
+    const RIGHT=4;
+    /**
+     * 1-up
+     * 2-left
+     * 3-right
+     * 4-down
+     * @type {number[]}
+     */
+    const DIRECTIONS=[UP,LEFT,RIGHT,DOWN];
+    const POSSIBILITIES=[0.7, 0.5, 0.5, 0.2];
+
     var my = this;
     /**
      * field descriptor
@@ -29,9 +29,11 @@ var Field = function(xSize, ySize, x, y){
     var lastDirections=[-1,-1,-1,-1];
     /**
      * returns next possible direction
+     * TODO:add different possibilities for directions
+     * TODO:use randomInt
      */
     my.getNextPossibleDirection = function(){
-        return DIRECTIONS[~~(Math.random() * 4)];
+        return choseRandom(DIRECTIONS, POSSIBILITIES);
     };
     /**
      * returns next x y for current vector
@@ -50,6 +52,12 @@ var Field = function(xSize, ySize, x, y){
         }
         throw "err:" + dir
     };
+    /**
+     * invert direction
+     * TODO: optimize this
+     * @param dir
+     * @returns {number}
+     */
     var inv=function(dir){
         switch(dir){
             case UP:
@@ -62,6 +70,11 @@ var Field = function(xSize, ySize, x, y){
                 return UP;
         }
     };
+    /**
+     * checking last direction to avoid fields clustering
+     * @param direction
+     * @returns {boolean}
+     */
     var checkDirectionComplexity = function(direction){
         if (lastDirections[0] == inv(direction) && lastDirections[1] == inv(direction) && lastDirections[2] == inv(direction)){
             return false;
@@ -126,6 +139,12 @@ var Field = function(xSize, ySize, x, y){
             my.data[x][y] = MILK;
         })
     }
+    my.generate = function(length){
+        my.createField();
+        for (var i=0; i < length; i++){
+            my._iter();
+        }
+    }
 };
 //
 // TODO: remove this code in production
@@ -133,10 +152,7 @@ var Field = function(xSize, ySize, x, y){
 if (typeof(window) == "undefined"){
     var W=100;
     var f = new Field(W,W, W/2, W/2);
-    f.createField();
-    for (var i=0; i < 1000; i++){
-        f._iter();
-    }
+    f.generate(100);
     console.log(f.data.map(function(a){
         return a.join(",");
     }));

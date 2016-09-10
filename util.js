@@ -71,5 +71,28 @@ function rand(maxValue){
 }
 
 function randomInt(maxValue){
-    return Math.floor(rand(maxValue));
+    return ~~rand(maxValue);
+}
+/**
+ * returns
+ * @param values {[]} array of values
+ * @param possibilities {number[]} array of possibilities, associated with values
+ * @returns {*}
+ */
+function choseRandom(values, possibilities){
+    var sum=0;
+    var tmp = [];
+    for (k in possibilities){
+        sum += possibilities[k];
+        tmp.push(sum)
+    }
+    var v=Math.random() * sum;
+
+    var prev=0;
+    for (var k in tmp){
+        if (v > prev && v <= tmp[k]) {
+            return values[k];
+        }
+        prev = tmp[k];
+    }
 }
