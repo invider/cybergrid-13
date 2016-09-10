@@ -6,8 +6,9 @@ const ROAD=2;
 const GLUCK=3;
 const UP=1;
 const LEFT=2;
-const RIGHT=3;
-const DOWN=4;
+const DOWN=3;
+const RIGHT=4;
+
 /**
  * 1-up
  * 2-left
@@ -25,39 +26,57 @@ var Field = function(xSize, ySize, x, y){
      */
     my.data=[
     ];
+    var lastDirections=[-1,-1,-1,-1];
     /**
      * returns next possible direction
      */
     my.getNextPossibleDirection = function(){
-        return ~~(Math.random() * 4);К
+        return DIRECTIONS[~~(Math.random() * 4)];
     };
     /**
      * returns next x y for current vector
      * @returns {[number, number]}
      */
     my._getNextXY = function(dir){
-        if (DIRECTIONS[dir] == UP){
-            return [x, y + 1];
-        }
-        if (DIRECTIONS[dir] == LEFT){
-            return [x - 1, y];
-        }
-        if (DIRECTIONS[dir] == RIGHT){
-            return [x + 1, y];
-        }
-        if (DIRECTIONS[dir] == DOWN){
-            return [x, y - 1];
+        switch(dir){
+            case UP:
+                return [x, y + 1];
+            case LEFT:
+                return [x - 1, y];
+            case RIGHT:
+                return [x + 1, y];
+            case DOWN:
+                return [x, y - 1];
         }
         throw "err:" + dir
+    };
+    var inv=function(dir){
+        switch(dir){
+            case UP:
+                return DOWN;
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            case DOWN:
+                return UP;
+        }
+    };
+    var checkDirectionComplexity = function(direction){
+        if (lastDirections[0] == inv(direction) && lastDirections[1] == inv(direction) && lastDirections[2] == inv(direction)){
+            return false;
+        }
+        return true;
     };
     /**
      * returns next x y for current vector, with checking field constrains
      * @returns {[number, number]}
      */
     my.getNextXY = function(){
-        var retr=1000;
+        var retr=10000;
         do{
-            var r = my._getNextXY(my.getNextPossibleDirection());
+            var dir = my.getNextPossibleDirection()
+            var r = my._getNextXY(dir);
             retr --;
             if (!retr){
                 throw "1";
@@ -65,7 +84,10 @@ var Field = function(xSize, ySize, x, y){
         } while (
             r[0] >= xSize || r[0] < 0 || r[1] >= ySize || r[1] < 0
             || my.getCell(r) == ROAD || my.getCell(r) == GLUCK
+            || !checkDirectionComplexity(dir)
         );
+        lastDirections.unshift(dir);
+        lastDirections.pop();
         return r;
     };
 
@@ -105,11 +127,17 @@ var Field = function(xSize, ySize, x, y){
         })
     }
 };
-var f = new Field(32,32, 8, 8);
-f.createField();
-for (var i=0; i < 1000; i++){
-    f._iter();
+//
+// TODO: remove this code in production
+//
+if (typeof(window) == "undefined"){
+    var W=100;
+    var f = new Field(W,W, W/2, W/2);
+    f.createField();
+    for (var i=0; i < 1000; i++){
+        f._iter();
+    }
+    console.log(f.data.map(function(a){
+        return a.join(",");
+    }));
 }
-console.log(f.data.map(function(a){
-    return a.join(",");
-}));
