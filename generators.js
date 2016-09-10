@@ -86,7 +86,6 @@ function generateField(){
 }
 
 function generateWorld() {
-    debugger;
     generateField()
     //generateWalls()
 

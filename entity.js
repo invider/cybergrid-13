@@ -68,38 +68,15 @@ function Entity() {
         ]
         
         var texPos = [
-            0, 0,
-            0, 1,
-            1, 0, 
-            0, 1,
-            1, 0, 
-            1, 1,
-
-            0, 0,
-            0, 1,
-            1, 0, 
-            0, 1,
-            1, 0, 
-            1, 1,
-
-            0, 0,
-            0, 1,
-            1, 0, 
-            0, 1,
-            1, 0, 
-            1, 1,
-
-            0, 0,
-            0, 1,
-            1, 0, 
-            0, 1,
-            1, 0, 
-            1, 1,
+            0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1,
+            0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1,
+            0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1,
+            0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1,
         ]
         this.initBufs(vtxPos, texPos, 24)
 
         // asign textures
-        this.type = rand(3)
+        this.type = randomInt(3)
         this.textures = textureSets[this.type]
         this.frame = 0
         this.frameTime = 0
