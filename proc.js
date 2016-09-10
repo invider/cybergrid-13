@@ -18,8 +18,10 @@ function generateTerminalImage(type, frame, lines) {
     return image
 
     function drawFrame(ctx, type, frame, lines){
-        ctx.fillStyle="#000000";
+        ctx.fillStyle="#000000"
+        ctx.globalAlpha = 0.6
         ctx.fillRect(0,0,width,height); 
+        ctx.globalAlpha = 1
 
         var cl = '#888888'
         switch(type) {

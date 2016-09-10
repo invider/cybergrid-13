@@ -54,12 +54,15 @@ function createTexture(type, frame, lines) {
     return texture
 }
 
-function initTexture(material) {
+// TODO - remove in final version
+function loadTexture(src) {
     var texture = gl.createTexture();
-    texture.image = generateTextureImage(material)
+    texture.image = new Image();
     texture.image.onload = function () {
         handleLoadedTexture(texture)
     };
+    texture.image.src = src; // setting last to make sure onload would be triggered on all platforms
+
     return texture
 }
 

@@ -65,22 +65,21 @@ function generateWalls() {
 
 function generateWorld() {
     generateWalls()
-    /*
+
     var e = spawn(Entity, 1, 0, 0)
     e.dx = 0.2
 
     e = spawn(Entity, -1, -0.3, 0)
     e.dx = -0.2
-    e.textures = textureSets[1]
+    e.textures = alphaTexture
 
     e = spawn(Entity, 0, -0.3, 1)
     e.dz = 0.2
-    e.textures = textureSets[2]
+    e.textures = alphaTexture
 
     e = spawn(Entity, 0, -0.3, -1)
     e.dz = -0.2
-    e.textures = textureSets[3]
-    */
+    e.textures = alphaTexture
 
     //e = spawn(Signal, 0, 0, 0)
     //e.scale = [2, 2, 2]

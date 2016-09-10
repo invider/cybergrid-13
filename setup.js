@@ -1,6 +1,9 @@
 function initGL(canvas) {
     try {
-        gl = canvas.getContext("experimental-webgl");
+        //gl = canvas.getContext("experimental-webgl");
+		gl = canvas.getContext("webgl", {
+			alpha: false
+		});
         expandCanvas()
         gl.viewportWidth = canvas.width;
         gl.viewportHeight = canvas.height;
@@ -14,9 +17,9 @@ function start() {
     initGL(canvas);
     initShaders();
 
+
     // generate textures
     var lines = initShaders.toString().split(";");
-    mudTexture = createTexture(0, 0, lines);
 
     for (var type = 0; type < 5; type++) {
         textureSets[type] = []
@@ -25,13 +28,22 @@ function start() {
         }
     }
 
+    // load texture
+    alphaTexture[0] = loadTexture('alien-2.png')
+
     generateWorld();
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.05, 0.0, 0.1, 1.0); // scene background color
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    // map event handlers
     window.onkeydown = handleKeyDown;
     window.onkeyup = handleKeyUp;
     window.oncontextmenu = handleMouse;
     window.addEventListener('resize', expandCanvas, false)
+
+    // initiate main cycle
     cycle();
 }
 document.addEventListener("DOMContentLoaded", start);

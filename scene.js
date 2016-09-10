@@ -3,6 +3,7 @@ var gl;
 // entities
 var entities = []
 var textureSets = []
+var alphaTexture = []
 
 // legacy - need to get rid of those
 var blocks = []
@@ -125,13 +126,6 @@ function render(delta) {
     mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
 
     // render walls
-    //gl.enable(gl.DEPTH_TEST);
-    //gl.enable(gl.GL_BLEND);
-    //gl.blendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
-    //gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-    //gl.blendFunc(gl.ONE, gl.ONE);
-    //gl.blendFunc(gl.ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
-
     segments.map( function(s) {
         s.render(delta)
     })
@@ -143,5 +137,9 @@ function render(delta) {
             e.render(delta)
         }
     })
+
+	//gl.clearColor(1, 1, 1, 1);
+	//gl.colorMask(false, false, false, true);
+	//gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
