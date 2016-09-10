@@ -10,12 +10,12 @@ var paths = {
         "setup.js",
         "shaders.js",
         "generators.js",
+        "Field.js",
         "entity.js",
-        "objects.js",
+        "signal.js",
         "util.js",
         "keyboard.js",
         "scene.js",
-        "app.js"
         ],
     html: ['index.html'],
     dist: 'dist/'
