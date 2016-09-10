@@ -1,3 +1,4 @@
+require('harmonize')();
 var gulp = require('gulp');
 var closureCompiler = require('gulp-closure-compiler');
 //var htmltidy = require('gulp-htmltidy');

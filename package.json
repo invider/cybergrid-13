@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "harmonize",
     "gulp-closure-compiler": "^0.4.0",
     "gulp-htmlclean": "^2.7.6"
   },
