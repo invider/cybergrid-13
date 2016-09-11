@@ -86,7 +86,7 @@ var Field = function(xSize, ySize, x, y){
      * @returns {[number, number]}
      */
     my.getNextXY = function(){
-        var retr=10000;
+        var retr=1000000;
         do{
             var dir = my.getNextPossibleDirection()
             var r = my._getNextXY(dir);
@@ -144,36 +144,25 @@ var Field = function(xSize, ySize, x, y){
             my.data[x][y] = MILK;
         })
     };
-    var checkRow = function(x,y){
+    var checkRoad = function(x,y){
         var cell = my.getCell(x, y);
         if (!cell){
             return false;
         }
         return cell !== MILK;
     };
-    my.rowIsNear = function(x,y){
-        return checkRow(x-1, y) ||
-            checkRow(x-1, y-1) ||
-            checkRow(x-1, y+1) ||
-            checkRow(x+1, y-1) ||
-            checkRow(x+1, y) ||
-            checkRow(x+1, y+1)
+    my.roadIsNear = function(x, y){
+        return checkRoad(x-1, y) ||
+            checkRoad(x-1, y-1) ||
+            checkRoad(x-1, y+1) ||
+            checkRoad(x+1, y-1) ||
+            checkRoad(x+1, y) ||
+            checkRoad(x+1, y+1)
     };
     my.generate = function(length){
         my.createField();
-        for (var i=0; i < length; i++){
+        while(x>0 && y>0 && x<xSize && x < ySize){
             my._iter();
         }
     }
 };
-//
-// TODO: remove this code in production
-//
-if (typeof(window) == "undefined"){
-    var W=200;
-    var f = new Field(W,W, W/2, W/2);
-    f.generate(100);
-    console.log(f.data.map(function(a){
-        return a.join(",");
-    }));
-}

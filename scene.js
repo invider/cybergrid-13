@@ -96,6 +96,7 @@ function update(delta) {
     // mode and fiddle camera
     xPos -= Math.sin(yaw) * playerSpeed * delta;
     zPos -= Math.cos(yaw) * playerSpeed * delta;
+    
 
     if (playerSpeed != 0) {
         joggingShift += delta * 10;
