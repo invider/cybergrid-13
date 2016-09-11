@@ -20,7 +20,7 @@ function expandCanvas() {
     canvas.style.height = newHeight + 'px'
     gl.viewportWidth = canvas.width;
     gl.viewportHeight = canvas.height;
-    render()
+    render(0)
 }
 
 function mvPushMatrix() {

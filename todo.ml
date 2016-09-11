@@ -10,6 +10,7 @@
 > map/path generator
 > render cooling
 ------------------------------------------
+V fix window resize bug
 V ghost model
 V objects independent translation/rotation
 V signals
