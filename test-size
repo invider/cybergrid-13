@@ -6,4 +6,5 @@ gulp
 
 tar -czf dist/cybergrid13.tar.gz dist/*
 
+du -sh dist/* | grep 'js'
 du -sh dist/* | grep 'tar.gz'
