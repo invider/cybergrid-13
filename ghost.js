@@ -1,4 +1,5 @@
 function Ghost() {
+    this.ghost = true
 
     this.init = function() {
         // generate additional geometry
@@ -22,6 +23,8 @@ function Ghost() {
 
         Ghost.prototype.init.call(this)
 
+        this.solid = true
+        this.radius = 0.2
         this.scale = [0.05, 0.05, 0.05]
         this.frameSpeed = 7
     }
@@ -30,7 +33,7 @@ function Ghost() {
         this.x += this.dx * delta
         this.y += this.dy * delta 
         this.z += this.dz * delta
-        this.roll +=1.6*delta
+        this.roll +=6.4*delta
         this.yaw += 0.8*delta
         this.nextFrame(delta)
     }

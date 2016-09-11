@@ -26,12 +26,19 @@ var yPos = 0.5; // player height
 var zPos = 0;
 
 var playerSpeed = 0;
+var playerRadius = 0.2;
 
 // Used to make us "jog" up and down
 var joggingShift = 0;
 
+var gameTime = 0
 var lastTime = Date.now()
 var shaderProgram;
+
+function playerHit(e, delta) {
+    e.alive = false
+    sfx(1)
+}
 
 function spawn(cons, x, y, z) {
     var entity = new cons()
@@ -48,6 +55,13 @@ function spawn(cons, x, y, z) {
     }
     if (!placed) entities.push(entity)
     return entity
+}
+
+// spawn a random ghost
+function ghost() {
+    var sx = -xPos + rand(20) - 10
+    var sz = -zPos + rand(20) - 10
+    spawn(Ghost, sx, -0.5, sz)
 }
 
 // spawn a random signal
@@ -93,6 +107,7 @@ function cycle() {
 }
 
 function update(delta) {
+    gameTime += delta
     // mode and fiddle camera
     xPos -= Math.sin(yaw) * playerSpeed * delta;
     zPos -= Math.cos(yaw) * playerSpeed * delta;
@@ -108,6 +123,11 @@ function update(delta) {
     // spawn signals
     if (rand(1) < 4*delta) {
         signal()
+    }
+
+    // spawn ghost
+    if (rand(1) < 1*delta) {
+        ghost()
     }
 }
 
@@ -128,6 +148,21 @@ function render(delta) {
     // update and render entities
     entities.map( function(e) {
         if (e.alive) {
+            // test with camera
+            
+            if (e.touch) {
+                // touchable
+                entities.map( function(t) {
+                    if (t.solid && e.touch(t.x, t.z, t.radius)) {
+                        e.hit(t)
+                    }
+                })
+
+                if (e.solid) {
+                    if (e.touch(-xPos, -zPos, playerRadius)) playerHit(e, delta)
+                }
+            }
+
             e.update(delta)
             e.render(delta)
         }
@@ -137,4 +172,3 @@ function render(delta) {
 	//gl.colorMask(false, false, false, true);
 	//gl.clear(gl.COLOR_BUFFER_BIT);
 }
-

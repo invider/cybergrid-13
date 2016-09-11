@@ -17,6 +17,7 @@ var paths = {
         "ghost.js",
         "util.js",
         "keyboard.js",
+        "sfx.js",
         "scene.js",
         ],
     html: ['index.html'],
@@ -25,7 +26,7 @@ var paths = {
 
 var compilerOptions={
     compilerPath: 'tools/compiler.jar',
-    fileName: 'app.js',
+    fileName: 'grid.js',
     compilerFlags: {
         //closure_entry_point: 'proc.start',
         compilation_level: 'ADVANCED_OPTIMIZATIONS',

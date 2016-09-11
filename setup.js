@@ -40,6 +40,8 @@ function start() {
     window.oncontextmenu = handleMouse;
     window.addEventListener('resize', expandCanvas, false)
 
+    // initiate fm
+    setupSFX()
     // initiate main cycle
     cycle();
 }

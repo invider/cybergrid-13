@@ -7,6 +7,7 @@ function Entity() {
         this.x = x
         this.y = y
         this.z = z
+        this.radius = 0.5
         this.pitch = 0
         this.yaw = 0
         this.roll = 0 
@@ -88,7 +89,17 @@ function Entity() {
         //this.pitch += 0.1*delta
         this.nextFrame(delta)
     }
-    
+
+    this.touch = function(x, z, r) {
+        return this.x-this.radius <= x+r
+                && this.x+this.radius >= x-r
+                && this.z-this.radius <= z+r
+                && this.z+this.radius >= z-r;
+    }
+
+    this.hit = function() {
+    }
+
     this.render = function() {
         // render
 

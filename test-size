@@ -1,0 +1,9 @@
+#!/bin/sh
+
+rm -rf dist/
+
+gulp
+
+tar -czf dist/cybergrid13.tar.gz dist/*
+
+du -sh dist/* | grep 'tar.gz'
