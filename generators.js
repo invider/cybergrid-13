@@ -23,4 +23,6 @@ function generateField(){
 
 function generateWorld() {
     generateField()
+
+    spawn(Ghost, 1, -0.5, 1)
 }

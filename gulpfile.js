@@ -14,6 +14,7 @@ var paths = {
         "Field.js",
         "entity.js",
         "signal.js",
+        "ghost.js",
         "util.js",
         "keyboard.js",
         "scene.js",

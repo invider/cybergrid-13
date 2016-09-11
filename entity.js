@@ -89,17 +89,8 @@ function Entity() {
         this.nextFrame(delta)
     }
     
-    this.render = function(delta) {
+    this.render = function() {
         // render
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[this.frame]);
-        gl.uniform1i(shaderProgram.samplerUniform, 0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
-        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.texCoordBuf.itemSize, gl.FLOAT, false, 0, 0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.vposBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
         // rotate and translate
         setMatrixUniforms()
@@ -112,12 +103,25 @@ function Entity() {
 
         setMoveUniforms();
 
+        // bind texture 
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[this.frame]);
+        gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+        // setup vertex and texture buffers
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuf);
+        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.texCoordBuf.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.vposBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
         // draw
         if (this.strip) {
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
         } else {
             gl.drawArrays(gl.TRIANGLES, 0, this.vposBuffer.numItems);
         }
+        if (this.postRender) this.postRender()
 
         // back to original transformation
         mvPopMatrix()
