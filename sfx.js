@@ -20,6 +20,140 @@ function renderNoise(t) {
     return 9
 }
 
+/*
+// alien phone
+f: function (n) {
+    var v = Math.sin(P2 * n.f * n.t
+            + 1 * Math.sin(P2 * (n.f / 16) * n.t));
+
+    if (n.t < 0.2) v *= n.t/0.2 // attack
+
+    var r = n.t - 1
+    if (r > 0) {
+        if (r >= 1) { n.s = 2; return 0; }
+        v *= 1 - r
+    }
+    return v
+
+
+
+n: 'tow',
+f: function (n) {
+    var v = Math.sin(P2 * n.f * n.t + (n.t-0.5)/0.5 * 20
+            * Math.sin(P2 * (n.f/4) * n.t))
+    if (n.t < 0.5) v *= n.t/0.5
+    if (n.s > 0) {
+        if (n.r > 1) { n.s = 2; return 0 }
+        v *= 1 - n.r
+    }
+    return v
+}},
+
+// wooden tremble
+f: function (n) {
+    var v = Math.sin(
+            P2 * n.f * n.t
+            + 4 * Math.sin(P2 * (n.f / 4) * n.t
+                + 8 * Math.sin(P2 * n.f * n.t/16))
+            + 0.3 * saw(n.f * n.t)
+            )
+
+    if (n.t < 0.2) v *= n.t/0.2 // attack
+
+    var r = n.t - 1
+    if (r > 0) {
+        if (r >= 1) { n.s = 2; return 0; }
+        v *= 1 - r
+    }
+    return v
+}},
+
+
+n: 'pewee',
+f: function (n) {
+    var f = n.f + 1000 - n.t*2000
+    var v = triangle(f * n.t)
+
+    if (n.t < 0.1) v *= n.t/0.1 // attack
+
+    var r = n.t - 0.5
+    if (r > 0) {
+        if (r >= 0.5) { n.s = 2; return 0; }
+        v *= 0.5 - r
+    }
+    return v
+}},
+
+
+n: 'pew',
+f: function (n) {
+    var f = n.f + 900 - n.t*1200
+    var v = triangle(f * n.t)
+
+    if (n.t < 0.1) v *= n.t/0.1 // attack
+
+    var r = n.t - 0.4
+    if (r > 0) {
+        if (r >= 0.2) { n.s = 2; return 0; }
+        v *= 1 - r/0.2
+    }
+    return v
+}},
+{
+n: 'laser',
+f: function (n) {
+    var f = n.f + 1000 - n.t*1800
+    var v = saw(f * n.t)
+
+    if (n.t < 0.1) v *= n.t/0.1 // attack
+
+    var r = n.t - 0.3
+    if (r > 0) {
+        if (r >= 0.1) { n.s = 2; return 0; }
+        v *= 1 - r/0.1
+    }
+    return v
+}},
+
+{
+n: 'laser-2',
+f: function (n) {
+    var f = n.f + 1000 - n.t*1800
+    var v = 
+        0.2 * square(f * n.t)
+        0.4 * Math.random()
+        0.4 * Math.sin(P2 * n.f * n.t)
+
+    if (n.t < 0.1) v *= n.t/0.1 // attack
+
+    var r = n.t - 0.3
+    if (r > 0) {
+        if (r >= 0.1) { n.s = 2; return 0; }
+        v *= 1 - r/0.1
+    }
+    return v
+}},
+{
+n: 'drone',
+f: function (n) {
+    var f = 120
+    var v = envacr(n.t, 0.3, 0.8, 0.3, 0.6, 0.5, 2) * square(
+            f * n.t
+            + 4*envc(n.t, 1, 0.6) * Math.sin(P2 * f/4 * n.t)
+            + Math.sin(P2 * f*2 * n.t)
+            )
+
+    // sustain
+    if (n.s > 0) {
+        if (n.r > 0.2) { n.s = 2; return 0 } // kill note
+        v *= envr(n.r, 0.2) // release
+    }
+    return v
+}},
+///////////////////////////////////////////////////////////
+
+*/
+
 function renderPowerUp(t) {
     var f = 100 + t*2000
     var v = square(f * t)

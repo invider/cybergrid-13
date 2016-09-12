@@ -13,7 +13,7 @@ var mvMatrix = mat4.create();
 var mvMatrixStack = [];
 
 // camera
-var pMatrix = mat4.create();
+var pMatrix = mat4.create()
 
 var pitch = 0;
 var pitchRate = 0;
@@ -28,6 +28,9 @@ var zPos = 0;
 var playerSpeed = 0;
 var playerRadius = 0.2;
 
+var dashIce = false
+var playerIce = 3
+
 // Used to make us "jog" up and down
 var joggingShift = 0;
 
@@ -36,8 +39,11 @@ var lastTime = Date.now()
 var shaderProgram;
 
 function playerHit(e, delta) {
-    e.alive = false
-    sfx(1)
+    if (e.ice && playerIce < 8) {
+        playerIce++
+        e.alive = false
+        sfx(1)
+    }
 }
 
 function spawn(cons, x, y, z) {
@@ -57,11 +63,11 @@ function spawn(cons, x, y, z) {
     return entity
 }
 
-// spawn a random ghost
-function ghost() {
+// spawn a random ice
+function ice() {
     var sx = -xPos + rand(20) - 10
     var sz = -zPos + rand(20) - 10
-    spawn(Ghost, sx, -0.5, sz)
+    spawn(Ice, sx, -0.5, sz)
 }
 
 // spawn a random signal
@@ -99,9 +105,14 @@ function cycle() {
     var now = Date.now()
     var delta = (now - lastTime)/1000
     window.requestAnimFrame(cycle);
-    handleKeyboard(delta);
-    update(delta);
-    render(delta);
+
+    try {
+        handleKeyboard(delta);
+        update(delta);
+        render(delta);
+    } catch (e) {
+        console.log(e)
+    }
 
     lastTime = now
 }
@@ -125,9 +136,9 @@ function update(delta) {
         signal()
     }
 
-    // spawn ghost
+    // spawn ice
     if (rand(1) < 1*delta) {
-        ghost()
+        ice()
     }
 }
 
@@ -137,7 +148,7 @@ function render(delta) {
 
     // set camera view
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-    // reset model movement matrix
+    // reset camera matrix
     mat4.identity(mvMatrix);
 
     // move to camera view - pitch, yaw, translate
@@ -168,6 +179,20 @@ function render(delta) {
         }
     })
 
+    // reset camera matrix
+    mat4.identity(mvMatrix);
+
+    // render dashboard
+    if (dashIce) {
+        var x = (playerIce-1) * 0.006 + 0.004
+        for (var i = 0; i < playerIce; i++) {
+            var ice = dashIce[i]
+            ice.x = x
+            ice.update(delta)
+            ice.render(delta)
+            x -= 0.012
+        }
+    }
 	//gl.clearColor(1, 1, 1, 1);
 	//gl.colorMask(false, false, false, true);
 	//gl.clear(gl.COLOR_BUFFER_BIT);

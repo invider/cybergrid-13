@@ -69,3 +69,5 @@ function generateTerminalImage(type, frame, lines) {
         ctx.stroke(); 
     }
 }
+
+

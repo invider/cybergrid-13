@@ -1,5 +1,5 @@
-function Ghost() {
-    this.ghost = true
+function Ice() {
+    this.ice = true
 
     this.init = function() {
         // generate additional geometry
@@ -21,7 +21,7 @@ function Ghost() {
         this.vposBuffer2 = this.vposBuffer
         this.texCoordBuf2 = this.texCoordBuf
 
-        Ghost.prototype.init.call(this)
+        Ice.prototype.init.call(this)
 
         this.solid = true
         this.radius = 0.2
@@ -49,4 +49,4 @@ function Ghost() {
     }
 
 }
-Ghost.prototype = new Entity()
+Ice.prototype = new Entity()

@@ -7,6 +7,7 @@ var htmlclean = require('gulp-htmlclean');
 var paths = {
     scripts: [
         'glMatrix-0.9.5.min.js',
+        "util.js",
         "proc.js",
         "setup.js",
         "shaders.js",
@@ -14,8 +15,7 @@ var paths = {
         "Field.js",
         "entity.js",
         "signal.js",
-        "ghost.js",
-        "util.js",
+        "ice.js",
         "keyboard.js",
         "sfx.js",
         "scene.js",

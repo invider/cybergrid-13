@@ -8,7 +8,7 @@ function initGL(canvas) {
         gl.viewportWidth = canvas.width;
         gl.viewportHeight = canvas.height;
     } catch (e) {
-        alert("no webgl!");
+        alert("no webgl!" + e);
     }
 }
 
@@ -16,7 +16,6 @@ function start() {
     var canvas = document.getElementById("canvas");
     initGL(canvas);
     initShaders();
-
 
     // generate textures
     var lines = initShaders.toString().split(";");

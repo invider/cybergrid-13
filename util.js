@@ -66,12 +66,20 @@ function loadTexture(src) {
     return texture
 }
 
+// LCG random generator implementation
+var _rnd_m = 0xFFFFFFFF, _rnd_a = 1664525, _rnd_c = 1013904223;
+var _seed = 1
+function rnd() {
+    _seed = (_rnd_a * _seed + _rnd_c) % _rnd_m
+    return _seed
+}
+
 function rand(maxValue){
-    return Math.random() * maxValue;
+    return rnd()/_rnd_m * maxValue
 }
 
 function randomInt(maxValue){
-    return ~~rand(maxValue);
+    return ~~rand(maxValue)
 }
 /**
  * returns
