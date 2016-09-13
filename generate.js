@@ -66,6 +66,7 @@ function generateTerminal(x,z,h, type){
         if (this.type == 1) {
             infected--
             cured++
+            if (infected == 0) newLevel()
         }
         this.type = 2
         this.textures = textureSets[2]
@@ -196,6 +197,14 @@ function newLevel() {
     infectCity(10, true)
     infectCity(10, false)
 
+    // generate compas
+    compas = spawn(Ice, 0, 0, 0)
+    compas.virus()
+    compas.solid = false
+    compas.wonderer = false
+    compas.lifeTime = 0
+    compas.scale = [0.2, 0.2, 0.2]
+
     sfx(0)
 }
 
@@ -212,6 +221,5 @@ function generateWorld() {
         ice.alive = false
         dashIce.push(ice)
     }
-
     newLevel()
 }

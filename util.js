@@ -66,6 +66,10 @@ function loadTexture(src) {
     return texture
 }
 
+function dist(x1, z1, x2, z2) {
+    return Math.sqrt((x2-x1)*(x2-x1) + (z2-z1)*(z2-z1))
+}
+
 // LCG random generator implementation
 var _rnd_m = 0xFFFFFFFF, _rnd_a = 1664525, _rnd_c = 1013904223;
 var _seed = 1
@@ -84,27 +88,4 @@ function rand(maxValue){
 
 function randi(maxValue){
     return ~~rand(maxValue)
-}
-/**
- * returns
- * @param values {[]} array of values
- * @param possibilities {number[]} array of possibilities, associated with values
- * @returns {*}
- */
-function choseRandom(values, possibilities){
-    var sum=0;
-    var tmp = [];
-    for (k in possibilities){
-        sum += possibilities[k];
-        tmp.push(sum)
-    }
-    var v=Math.random() * sum;
-
-    var prev=0;
-    for (var k in tmp){
-        if (v > prev && v <= tmp[k]) {
-            return values[k];
-        }
-        prev = tmp[k];
-    }
 }

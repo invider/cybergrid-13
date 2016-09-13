@@ -6,10 +6,11 @@ var total = 0
 var system = 0
 var infected = 0
 var cured = 0
-var protection = 0.08
-var aggression = 0.1
+var protection = 0.1
+var aggression = 0.02
 var map = []
 var mapWidth
+var compas
 var entities = []
 var textureSets = []
 var alphaTexture = []
@@ -33,6 +34,7 @@ var yawRate = 0;
 var xPos = 0;
 var yPos = 0.5; // player height
 var zPos = 0;
+var compasDist
 
 var playerSpeed = 0;
 var playerRadius = 0.2;
@@ -87,15 +89,6 @@ function spawn(cons, x, y, z) {
     if (!placed) entities.push(entity)
     return entity
 }
-
-/*
-// spawn a random ice
-function ice() {
-    var sx = -xPos + rand(20) - 10
-    var sz = -zPos + rand(20) - 10
-    spawn(Ice, sx, -0.5, sz)
-}
-*/
 
 // spawn a random signal
 function signal() {
@@ -162,13 +155,6 @@ function update(delta) {
     if (rand(1) < 4*delta) {
         signal()
     }
-
-    /*
-    // spawn ice
-    if (rand(1) < 1*delta) {
-        ice()
-    }
-    */
 }
 
 function render(delta) {
@@ -186,10 +172,20 @@ function render(delta) {
     mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
 
     // update and render entities
+    compasDist = 99999
     entities.map( function(e) {
         if (e.alive) {
+            // check on closest
+            if (e.kind == 0 && e.type == 1) {
+                var d = dist(-xPos, -zPos, e.x, e.z)
+                if (d < compasDist) {
+                    compasDist = d
+                    compas.x = e.x
+                    compas.y = -e.h - 3
+                    compas.z = e.z
+                }
+            }
             // test with camera
-            
             if (e.touch) {
                 // touchable
                 entities.map( function(t) {
