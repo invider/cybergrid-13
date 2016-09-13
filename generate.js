@@ -198,7 +198,7 @@ function newLevel() {
     _seed = level
     playerIce = 80 - level
     if (playerIce < 8) playerIce = 8
-    aggression = 0.001 + level/1000
+    aggression = 0.005 + level/200
     if (aggression > 0.3) aggression = 0.3
 
     map = []

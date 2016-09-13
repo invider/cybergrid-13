@@ -13,7 +13,7 @@ function handleKeyUp(e) {
     keys[code] = false;
     if (code == 27) {
         newLevel()
-    } else if (code == 32) {
+    } else if (code == 32 || code == 69) {
         if (playerRecoil < 0) {
             froze()
             playerRecoil = 1
