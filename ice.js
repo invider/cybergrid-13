@@ -57,6 +57,7 @@ function Ice() {
             // new direction
             var dir = Math.PI*2*rndf()
             var speed = 0.3 + rndf()*1.5
+            if (this.type == 0) speed /= 4
             this.keep = 2 + rndf()*8
             this.dx = speed * Math.sin(dir)
             this.dz = speed * Math.cos(dir)

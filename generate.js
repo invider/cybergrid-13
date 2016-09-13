@@ -28,11 +28,12 @@ function generateTerminal(x,z,h, type){
     e.scale = [0.5, 0.5, 0.5]
     e.h = h
     e.b
-    e.infect = function() {
+    e.infect = function(loud) {
         if (this.type != 0) return false
         this.type = 1
         this.textures = textureSets[1]
         infected++
+        if (loud) sfx(3)
         return true
     }
     e.system = function() {
@@ -58,6 +59,7 @@ function generateTerminal(x,z,h, type){
                     e.wonderer = true
                     t.alive = false
                 }
+                sfx(6)
             } else if (this.infect()) t.alive = false
         }
     }
@@ -67,6 +69,9 @@ function generateTerminal(x,z,h, type){
             infected--
             cured++
             if (infected == 0) newLevel()
+            else sfx(5)
+        } else {
+            sfx(4)
         }
         this.type = 2
         this.textures = textureSets[2]
@@ -78,12 +83,14 @@ function generateTerminal(x,z,h, type){
                 // spawn virus
                 var e = spawn(Ice, this.x, this.y, this.z)
                 e.virus()
+                sfx(10)
             }
             break;
         case 3:
             if (rndf() < protection/system) {
                 // spawn ice
                 var e = spawn(Ice, this.x, this.y, this.z)
+                sfx(11)
             }
             break;
         }
@@ -150,12 +157,12 @@ function generateCity() {
     genesisBomb(mid, mid, 16, 0.1, 1)
 
     // districts
-    for (var i = 0; i < mid/8; i++) {
+    for (var i = 0; i < mid/16; i++) {
         var nx = randi(mapWidth)
         var ny = randi(mapWidth)
         var nw = Math.round(mid/4 + randi(mid/4))
-        genesisBomb(nx, ny, Math.round(nw/4), 5)
-        genesisBomb(nx, ny, nw, 2)
+        genesisBomb(nx, ny, Math.round(nw/4), 0.4, 3)
+        genesisBomb(nx, ny, nw, 0.6, 1)
     }
 
 
@@ -189,13 +196,21 @@ function infectCity(sources, sys) {
 function newLevel() {
     level++
     _seed = level
+    playerIce = 80 - level
+    if (playerIce < 8) playerIce = 8
+    aggression = 0.001 + level/1000
+    if (aggression > 0.3) aggression = 0.3
+
     map = []
     mapWidth = 64 // must be even!
     entities = []
 
+
     generateCity()
-    infectCity(10, true)
-    infectCity(10, false)
+    var sys = 30-level
+    if (sys < 8) sys = 8
+    infectCity(sys, true)
+    infectCity(8+level, false)
 
     // generate compas
     compas = spawn(Ice, 0, 0, 0)
@@ -205,15 +220,19 @@ function newLevel() {
     compas.lifeTime = 0
     compas.scale = [0.2, 0.2, 0.2]
 
-    sfx(0)
+    sfx(9)
 }
 
 function generateWorld() {
     // generate dashboard
     dashIce = []
-    for (var i = 0; i < 8; i++) {
-        var ice = spawn(Ice, 0, 0.04, 0.12)
-        ice.scale = [0.003, 0.003, 0.003]
+    for (var i = 0; i < 16; i++) {
+        var ice
+        if (i > 7) ice = spawn(Ice, 0, 0.045, 0.14)
+        else ice = spawn(Ice, 0, 0.03, 0.12)
+
+        if (i > 7) ice.scale = [0.005, 0.005, 0.005]
+        else ice.scale = [0.003, 0.003, 0.003]
         ice.pitch = 0
         ice.yaw = 0
         ice.roll = 0

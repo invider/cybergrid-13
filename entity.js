@@ -6,6 +6,7 @@ function Entity() {
     this.initPos = function(x, y, z) {
         this.alive = true
         this.strip = false
+        this.solid = true
         this.x = x
         this.y = y
         this.z = z

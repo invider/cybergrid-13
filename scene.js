@@ -7,7 +7,7 @@ var system = 0
 var infected = 0
 var cured = 0
 var protection = 0.1
-var aggression = 0.02
+var aggression = 0.01
 var map = []
 var mapWidth
 var compas
@@ -40,7 +40,9 @@ var playerSpeed = 0;
 var playerRadius = 0.2;
 
 var dashIce = false
-var playerIce = 8
+var playerIce = 0
+var playerRecoil = 0
+var playerTerm
 
 // Used to make us "jog" up and down
 var joggingShift = 0;
@@ -51,15 +53,27 @@ var shaderProgram;
 
 function playerHit(e, delta) {
     if (e.kind == 2) {
-        if (e.type == 0 && playerIce < 8) {
+        if (e.type == 0 && playerIce < 80) {
             playerIce++
             e.alive = false
             sfx(1)
         } else if (e.type == 1) {
-            playerIce = 0
+            // got hit by a virus!
+            if (playerIce > 0) sfx(7)
+            playerIce -= 8
+            if (playerIce < 0) playerIce = 0
             e.alive = false
-            sfx(1)
         }
+    } else if (e.kind == 0) {
+        if (e.type == 1) {
+            // player hit the infected terminal!
+            if (playerIce > 0 && e != playerTerm) {
+                playerIce -= 16
+                if (playerIce < 0) playerIce = 0
+                sfx(8)
+            }
+        } 
+        playerTerm = e
     }
 }
 
@@ -69,7 +83,7 @@ function froze() {
         var e = spawn(Ice, -xPos, -0.5, -zPos)
         e.froze()
         playerIce--
-        sfx(1)
+        sfx(2)
     }
 }
 
@@ -139,6 +153,8 @@ function cycle() {
 
 function update(delta) {
     gameTime += delta
+    playerRecoil -= delta
+
     // mode and fiddle camera
     xPos -= Math.sin(yaw) * playerSpeed * delta;
     zPos -= Math.cos(yaw) * playerSpeed * delta;
@@ -209,8 +225,20 @@ function render(delta) {
 
     // render dashboard
     if (dashIce) {
-        var x = (playerIce-1) * 0.006 + 0.004
-        for (var i = 0; i < playerIce; i++) {
+        var gi = Math.floor(playerIce / 9)
+        var li = playerIce % 9
+
+        var x = (gi-1) * 0.009 + 0
+        for (var i = 0; i < gi; i++) {
+            var ice = dashIce[8 + i]
+            ice.x = x
+            ice.update(delta)
+            ice.render(delta)
+            x -= 0.017
+        }
+        
+        var x = (li-1) * 0.006 + 0.004
+        for (var i = 0; i < li; i++) {
             var ice = dashIce[i]
             ice.x = x
             ice.update(delta)

@@ -14,7 +14,10 @@ function handleKeyUp(e) {
     if (code == 27) {
         newLevel()
     } else if (code == 32) {
-        froze()
+        if (playerRecoil < 0) {
+            froze()
+            playerRecoil = 1
+        }
     }
 
     e.preventDefault()
