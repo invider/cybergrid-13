@@ -1,5 +1,8 @@
 function Ice() {
     this.kind = 2
+    this.frozen = false
+    this.wonderer = true
+    this.lifeTime = 20
 
     this.init = function() {
         // generate additional geometry
@@ -29,7 +32,43 @@ function Ice() {
         this.frameSpeed = 7
     }
 
+    // shoot ice
+    this.froze = function() {
+        this.frozen = true
+        this.wonderer = false
+        var dx = 5*Math.sin(yaw)
+        var dz = 5*Math.cos(yaw)
+        this.dx = dx
+        this.dz = dz
+        this.type = 2
+        this.textures = textureSets[2]
+    }
+
+    this.virus = function() {
+        this.lifeTime = 20
+        this.type = 1
+        this.textures = textureSets[1]
+    }
+
+    this.keep = 0
     this.update = function(delta) {
+        this.keep -= delta
+        if (this.wonderer && this.keep < 0) {
+            // new direction
+            var dir = Math.PI*2*rndf()
+            var speed = 0.3 + rndf()*1.5
+            this.keep = 2 + rndf()*8
+            this.dx = speed * Math.sin(dir)
+            this.dz = speed * Math.cos(dir)
+            if (this.x < -mapWidth
+                    || this.x > mapWidth*2
+                    || this.z < -mapWidth
+                    || this.z > mapWidth*2) this.alive = false
+        }
+        if (this.lifeTime > 0) {
+            this.lifeTime -= delta
+            if (this.lifeTime <= 0) this.alive = false
+        }
         this.x += this.dx * delta
         this.y += this.dy * delta 
         this.z += this.dz * delta

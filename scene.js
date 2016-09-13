@@ -1,7 +1,13 @@
 var gl;
 
 // entities
-var level = 1
+var level = 0
+var total = 0
+var system = 0
+var infected = 0
+var cured = 0
+var protection = 0.08
+var aggression = 0.1
 var map = []
 var mapWidth
 var entities = []
@@ -32,7 +38,7 @@ var playerSpeed = 0;
 var playerRadius = 0.2;
 
 var dashIce = false
-var playerIce = 3
+var playerIce = 8
 
 // Used to make us "jog" up and down
 var joggingShift = 0;
@@ -42,9 +48,25 @@ var lastTime = Date.now()
 var shaderProgram;
 
 function playerHit(e, delta) {
-    if (e.kind == 2 && playerIce < 8) {
-        playerIce++
-        e.alive = false
+    if (e.kind == 2) {
+        if (e.type == 0 && playerIce < 8) {
+            playerIce++
+            e.alive = false
+            sfx(1)
+        } else if (e.type == 1) {
+            playerIce = 0
+            e.alive = false
+            sfx(1)
+        }
+    }
+}
+
+// shoot ice
+function froze() {
+    if (playerIce > 0) {
+        var e = spawn(Ice, -xPos, -0.5, -zPos)
+        e.froze()
+        playerIce--
         sfx(1)
     }
 }
@@ -66,12 +88,14 @@ function spawn(cons, x, y, z) {
     return entity
 }
 
+/*
 // spawn a random ice
 function ice() {
     var sx = -xPos + rand(20) - 10
     var sz = -zPos + rand(20) - 10
     spawn(Ice, sx, -0.5, sz)
 }
+*/
 
 // spawn a random signal
 function signal() {
@@ -139,10 +163,12 @@ function update(delta) {
         signal()
     }
 
+    /*
     // spawn ice
     if (rand(1) < 1*delta) {
         ice()
     }
+    */
 }
 
 function render(delta) {
@@ -167,7 +193,7 @@ function render(delta) {
             if (e.touch) {
                 // touchable
                 entities.map( function(t) {
-                    if (t.solid && e.touch(t.x, t.z, t.radius)) {
+                    if (e != t && t.solid && e.touch(t.x, t.z, t.radius)) {
                         e.hit(t)
                     }
                 })

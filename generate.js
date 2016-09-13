@@ -5,7 +5,7 @@ function reserveSpot(x, z, e) {
 function reserveAvenue(x, z, dx, dz) {
     for (var px = 0; px < dx; px++) {
         for (var pz = 0; pz < dz; pz++) {
-            reserveSpot(z+pz, x+px, true)
+            reserveSpot(x+px, z+pz, true)
         }
     }
 }
@@ -18,6 +18,9 @@ function generateTerminal(x,z,h, type){
     if (x < 0 || z < 0 || x >= mapWidth || z >= mapWidth) return 
     if (map[z*mapWidth + x]) return
 
+    total++
+    if (type == 3) system++
+
     var e = spawn(Entity, x, -0.5, z)
     reserveSpot(x, z, e)
     e.type = type
@@ -29,16 +32,60 @@ function generateTerminal(x,z,h, type){
         if (this.type != 0) return false
         this.type = 1
         this.textures = textureSets[1]
+        infected++
         return true
     }
     e.system = function() {
         if (this.type != 0) return false
         this.type = 3
         this.textures = textureSets[3]
+        system++
         return true
     }
+    e.hit = function(t) {
+        if (t.source == this) return
+        if (t.frozen) {
+            if (this.type < 2 && t.frozen) this.cure()
+            t.alive = false
+        } else if (t.kind == 2 && t.type == 1) {
+            // infection!
+            if (this.type == 2) {
+                for (var i = 0; i < 4; i++) {
+                    // spawn cure
+                    var e = spawn(Ice, this.x, this.y, this.z)
+                    e.source = this
+                    e.froze()
+                    e.wonderer = true
+                    t.alive = false
+                }
+            } else if (this.infect()) t.alive = false
+        }
+    }
     e.cure = function() {
+        if (this.type >= 2) return
+        if (this.type == 1) {
+            infected--
+            cured++
+        }
         this.type = 2
+        this.textures = textureSets[2]
+    }
+    e.postUpdate = function(delta) {
+        switch (this.type) {
+        case 1:
+            if (rndf() < aggression/infected) {
+                // spawn virus
+                var e = spawn(Ice, this.x, this.y, this.z)
+                e.virus()
+            }
+            break;
+        case 3:
+            if (rndf() < protection/system) {
+                // spawn ice
+                var e = spawn(Ice, this.x, this.y, this.z)
+            }
+            break;
+        }
     }
 }
 
@@ -60,6 +107,7 @@ function genesisBomb(x, z, w, density, height) {
 function generateCity() {
     var mid = mapWidth / 2
 
+
     // supervisor supertall
     generateTerminal(mid, mid, 8+randi(4), 3)
     // central square
@@ -68,6 +116,14 @@ function generateCity() {
     // central avenues
     reserveAvenue(mid-1, 0, 3, mapWidth)
     reserveAvenue(0, mid-1, mapWidth, 3)
+
+    // place player
+    xPos = -Math.round(mapWidth/3)
+    zPos = -5
+    yaw = 0.5
+    // clean up room around player
+    reserveSquare(-xPos-4, -zPos-4, 8)
+
 
     // squares
     for (var i = 0; i < mid/2; i++) {
@@ -106,9 +162,6 @@ function generateCity() {
     genesisBomb(mid, mid, mid, 0.1, 1)
 
 
-    xPos = -mapWidth/3
-    zPos = -5
-    yaw = 0.5
 }
 
 function infectAt(pos, sys) {
@@ -132,7 +185,8 @@ function infectCity(sources, sys) {
 }
 
 
-function generateLevel() {
+function newLevel() {
+    level++
     _seed = level
     map = []
     mapWidth = 64 // must be even!
@@ -140,7 +194,7 @@ function generateLevel() {
 
     generateCity()
     infectCity(10, true)
-    infectCity(5, false)
+    infectCity(10, false)
 
     sfx(0)
 }
@@ -154,9 +208,10 @@ function generateWorld() {
         ice.pitch = 0
         ice.yaw = 0
         ice.roll = 0
+        ice.wonderer = false
         ice.alive = false
         dashIce.push(ice)
     }
 
-    generateLevel()
+    newLevel()
 }

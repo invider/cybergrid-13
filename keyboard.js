@@ -9,7 +9,14 @@ function handleKeyDown(e) {
     return false;
 }
 function handleKeyUp(e) {
-    keys[e.which || e.keyCode] = false;
+    var code = e.which || e.keyCode
+    keys[code] = false;
+    if (code == 27) {
+        newLevel()
+    } else if (code == 32) {
+        froze()
+    }
+
     e.preventDefault()
     e.stopPropagation()
     return false;

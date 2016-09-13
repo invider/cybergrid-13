@@ -3,6 +3,7 @@ function Signal() {
     this.kind = 1
     this.time = 60
 
+    this.hit = function() {}
 
     this.update = function(delta) {
         this.time -= delta

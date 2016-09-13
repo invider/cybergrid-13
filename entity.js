@@ -91,6 +91,7 @@ function Entity() {
         //this.yaw += 0.2*delta
         //this.pitch += 0.1*delta
         this.nextFrame(delta)
+        if (this.postUpdate) this.postUpdate(delta)
     }
 
     this.touch = function(x, z, r) {
@@ -100,8 +101,7 @@ function Entity() {
                 && this.z+this.radius >= z-r;
     }
 
-    this.hit = function() {
-    }
+    this.hit = function() {}
 
     this.drawModel = function() {
         // draw
