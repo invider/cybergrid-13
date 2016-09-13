@@ -1,5 +1,5 @@
 function Ice() {
-    this.ice = true
+    this.kind = 2
 
     this.init = function() {
         // generate additional geometry

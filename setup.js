@@ -27,7 +27,10 @@ function start() {
         }
     }
 
+    setupSFX()
     generateWorld();
+
+    // setup gl
     gl.clearColor(0.1, 0.0, 0.2, 1.0); // scene background color
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -39,8 +42,6 @@ function start() {
     window.oncontextmenu = handleMouse;
     window.addEventListener('resize', expandCanvas, false)
 
-    // initiate fm
-    setupSFX()
     // initiate main cycle
     cycle();
 }

@@ -210,6 +210,4 @@ function loop(sample, time) {
 function setupSFX() {
     samples.push(createSample(renderNoise, false))
     samples.push(createSample(renderPowerUp, false))
-
-    sfx(0)
 }

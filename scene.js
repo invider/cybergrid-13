@@ -1,6 +1,9 @@
 var gl;
 
 // entities
+var level = 1
+var map = []
+var mapWidth
 var entities = []
 var textureSets = []
 var alphaTexture = []
@@ -39,7 +42,7 @@ var lastTime = Date.now()
 var shaderProgram;
 
 function playerHit(e, delta) {
-    if (e.ice && playerIce < 8) {
+    if (e.kind == 2 && playerIce < 8) {
         playerIce++
         e.alive = false
         sfx(1)
@@ -77,7 +80,7 @@ function signal() {
     var sy = rand(5)-4
     var dx = 0, dz = 0
 
-    switch(randomInt(4)) {
+    switch(randi(4)) {
         case 0:
             sx -= 16; sz += rand(8) - 4; dx = 1;
             break;
@@ -97,7 +100,7 @@ function signal() {
     s.dz = dz*sx
     sx = 0.05 + rand(0.2)
     s.scale = [sx, sx, sx]
-    s.textures = textureSets[randomInt(textureSets.length)]
+    s.textures = textureSets[randi(textureSets.length)]
 }
 
 

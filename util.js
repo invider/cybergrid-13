@@ -74,11 +74,15 @@ function rnd() {
     return _seed
 }
 
+function rndf() {
+    return rnd()/_rnd_m
+}
+
 function rand(maxValue){
     return rnd()/_rnd_m * maxValue
 }
 
-function randomInt(maxValue){
+function randi(maxValue){
     return ~~rand(maxValue)
 }
 /**

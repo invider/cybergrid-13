@@ -1,5 +1,7 @@
 function Entity() {
 
+    this.kind = 0
+
     // executed when spawned
     this.initPos = function(x, y, z) {
         this.alive = true
@@ -7,6 +9,7 @@ function Entity() {
         this.x = x
         this.y = y
         this.z = z
+        this.h = 1
         this.radius = 0.5
         this.pitch = 0
         this.yaw = 0
@@ -100,12 +103,23 @@ function Entity() {
     this.hit = function() {
     }
 
+    this.drawModel = function() {
+        // draw
+        if (this.strip) {
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
+        } else {
+            gl.drawArrays(gl.TRIANGLES, 0, this.vposBuffer.numItems);
+        }
+        if (this.postRender) this.postRender()
+    }
+
     this.render = function() {
         // render
 
         // rotate and translate
         setMatrixUniforms()
         mvPushMatrix()
+
         mat4.translate(mvMatrix, [-this.x, -this.y, -this.z]);
         mat4.scale(mvMatrix, this.scale);
         mat4.rotate(mvMatrix, -this.roll, [0, 0, 1]);
@@ -126,13 +140,13 @@ function Entity() {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vposBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.vposBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-        // draw
-        if (this.strip) {
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vposBuffer.numItems);
-        } else {
-            gl.drawArrays(gl.TRIANGLES, 0, this.vposBuffer.numItems);
+        this.drawModel()
+        for (var floor = 1; floor < this.h; floor++) {
+            mat4.translate(mvMatrix, [0, 2, 0]);
+            setMoveUniforms();
+            this.drawModel()
         }
-        if (this.postRender) this.postRender()
+        
 
         // back to original transformation
         mvPopMatrix()

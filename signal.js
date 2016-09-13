@@ -1,6 +1,8 @@
 function Signal() {
 
+    this.kind = 1
     this.time = 60
+
 
     this.update = function(delta) {
         this.time -= delta
