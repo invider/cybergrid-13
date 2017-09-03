@@ -15,10 +15,6 @@ var entities = []
 var textureSets = []
 var alphaTexture = []
 
-// legacy - need to get rid of those
-var blocks = []
-var segments = []
-
 var mvMatrix = mat4.create();
 var mvMatrixStack = [];
 
