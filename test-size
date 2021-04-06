@@ -5,7 +5,7 @@ rm -rf dist/
 gulp
 
 #tar -czf dist/cybergrid13.tar.gz dist/*
-zip dist/cybergrid13.zip dist/*
+zip dist/cybergrid-13.zip dist/*
 
 du -sh dist/* | grep 'js'
 du -sh dist/* | grep 'zip'
